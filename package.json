@@ -18,7 +18,7 @@
     "start": "node app.js",
     "server": "node --watch app.js",
     "client": "vite client",
-    "build": "vite build client --outDir ../dist",
+    "build": "vite build client --emptyOutDir --outDir ../dist",
     "lint": "eslint .",
     "test": "echo \"Skipped: no test specified\" && exit 0"
   },
