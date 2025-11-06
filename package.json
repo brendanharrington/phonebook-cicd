@@ -12,14 +12,28 @@
   },
   "license": "ISC",
   "author": "Brendan Harrington",
-  "type": "commonjs",
+  "type": "module",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "dev": "node --watch app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "server": "node --watch app.js",
+    "client": "vite client",
+    "build": "vite build client --emptyOutDir --outDir ../dist",
+    "lint": "eslint .",
+    "test": "echo \"Skipped: no test specified\" && exit 0"
   },
   "dependencies": {
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@vitejs/plugin-react": "^5.1.0",
+    "concurrently": "^9.2.1",
+    "eslint": "^9.39.1",
+    "eslint-plugin-react": "^7.37.5",
+    "globals": "^16.5.0",
+    "vite": "^7.2.1"
   }
 }
