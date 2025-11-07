@@ -1,12 +1,12 @@
 {
   "version": 2,
-  "github": { "enabled": false },
   "builds": [
-    { "src": "server/index.js", "use": "@vercel/node" },
-    { "src": "client/vite.config.js", "use": "@vercel/static-build", "config": { "distDir": "dist" } }
+    { "src": "package.json", "use": "@vercel/static-build", "config": { "distDir": "dist" } },
+    { "src": "api/**/*.js", "use": "@vercel/node" }
   ],
   "routes": [
-    { "src": "/api/(.*)", "dest": "server/index.js" },
-    { "src": "/(.*)", "dest": "/dist/$1" }
-  ]
+    { "src": "/api/(.*)", "dest": "/api/$1" },
+    { "src": "/((?!.*\\..*$).*)", "dest": "/index.html" }
+  ],
+  "github": { "enabled": false }
 }
