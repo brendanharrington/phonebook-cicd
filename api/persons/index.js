@@ -1,7 +1,9 @@
 import Person from "../../server/models/person.js";
+import connectToDatabase from "../../server/connect.js";
 
 export default async function handler(req, res) {
   try {
+    await connectToDatabase();
     if (req.method === "GET") {
       const persons = await Person.find({});
       return res.status(200).json(persons);
