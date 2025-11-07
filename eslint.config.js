@@ -1,11 +1,12 @@
 import js from "@eslint/js";
 import globals from "globals";
 import react from "eslint-plugin-react";
-import { defineConfig } from "eslint/config";
+import { defineConfig, globalIgnores } from "eslint/config";
 
 export default defineConfig([
   js.configs.recommended,
   react.configs.flat.recommended,
+  globalIgnores(["dist/**"]),
   {
     files: ["**/*.{js,mjs,cjs,jsx}"],
     languageOptions: {
