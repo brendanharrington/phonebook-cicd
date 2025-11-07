@@ -1,5 +1,12 @@
 {
-  "github": {
-    "enabled": false
-  }
+  "version": 2,
+  "github": { "enabled": false },
+  "builds": [
+    { "src": "server/index.js", "use": "@vercel/node" },
+    { "src": "client/vite.config.js", "use": "@vercel/static-build", "config": { "distDir": "dist" } }
+  ],
+  "routes": [
+    { "src": "/api/(.*)", "dest": "server/index.js" },
+    { "src": "/(.*)", "dest": "/dist/$1" }
+  ]
 }

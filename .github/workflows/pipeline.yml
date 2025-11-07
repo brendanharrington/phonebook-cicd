@@ -59,14 +59,12 @@ jobs:
         run: npm run build
       - name: Run tests
         run: npm run test
-      - name: Deploy to Vercel (built dist)
+      - name: Deploy to Vercel (full stack)
         uses: amondnet/vercel-action@v25
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           vercel-org-id: ${{ secrets.ORG_ID }}
           vercel-project-id: ${{ secrets.PROJECT_ID }}
-          # Deploy the already-built `dist` folder. --confirm skips interactive prompts.
-          vercel-args: --prod ./dist --confirm
-          # Run the action from the repository root (project is built at root/dist)
+          vercel-args: --prod --confirm
           working-directory: .
