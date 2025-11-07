@@ -11,8 +11,8 @@ const create = async newPerson => {
   return response.data;
 };
 
-const remove = async person => {
-  const response = await axios.delete(`${baseUrl}/${person.id}`);
+const remove = async id => {
+  const response = await axios.delete(`${baseUrl}/${id}`);
   return response.data;
 };
 
