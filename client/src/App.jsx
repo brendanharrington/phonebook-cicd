@@ -61,7 +61,10 @@ const App = () => {
           });
         })
         .catch(error => {
-          const errMsg = error?.response?.data?.error || error?.message || "An unexpected error occurred.";
+          let errMsg = error?.response?.data?.error || error?.message || "An unexpected error occurred.";
+          if (typeof errMsg === "object") {
+            errMsg = JSON.stringify(errMsg);
+          }
           console.error(errMsg);
           showAlert({
             type: "error",
@@ -117,9 +120,10 @@ const App = () => {
           const errData = error?.response?.data;
           const status = error?.response?.status;
           if (errData?.error) {
+            const msg = typeof errData.error === "object" ? JSON.stringify(errData.error) : errData.error;
             showAlert({
               type: "error",
-              message: `Error: ${errData.error}`,
+              message: `Error: ${msg}`,
             });
           } else if (status === 404) {
             showAlert({

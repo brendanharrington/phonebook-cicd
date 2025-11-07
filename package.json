@@ -19,7 +19,7 @@
     "server": "node --watch server/index.js",
     "client": "vite",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "build": "vite build --emptyOutDir --outDir ../dist",
+    "build": "vite build",
     "lint": "eslint .",
     "test": "echo \"Skipped: no test specified\" && exit 0"
   },
