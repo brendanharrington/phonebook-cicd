@@ -2,4 +2,5 @@ node_modules
 .vercel
 dist
 .env
-.gitignore
+.vscode
+.env*.local
