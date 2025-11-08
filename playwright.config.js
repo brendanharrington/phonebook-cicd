@@ -75,7 +75,9 @@ export default defineConfig({
   webServer: {
     command: "npm run dev",
     url: "http://localhost:5173",
-    reuseExistingServer: !process.env.CI,
+    // In CI we often start the server prior to Playwright; allow re-using an existing server
+    // to avoid port-in-use errors. Locally Playwright will still start the server when needed.
+    reuseExistingServer: true,
   },
 });
 
