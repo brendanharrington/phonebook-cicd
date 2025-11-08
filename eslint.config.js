@@ -6,7 +6,7 @@ import { defineConfig, globalIgnores } from "eslint/config";
 export default defineConfig([
   js.configs.recommended,
   react.configs.flat.recommended,
-  globalIgnores(["dist/**"]),
+  globalIgnores(["dist/**", "node_modules/**", "playwright-report/**"]),
   {
     files: ["**/*.{js,mjs,cjs,jsx}"],
     languageOptions: {
