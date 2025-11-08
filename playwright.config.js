@@ -8,6 +8,9 @@ export default defineConfig({
   workers: process.env.CI ? 1 : 1,
   reporter: process.env.CI ? "github" : "html",
   
+  // Ensure Playwright uses its own test runner, not Vitest
+  testMatch: "**/*.spec.js",
+  
   use: {
     baseURL: process.env.CI ? "http://localhost:5001" : "http://localhost:3000",
     trace: "on-first-retry",
