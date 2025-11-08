@@ -4,7 +4,6 @@ dist
 .env
 .vscode
 .env*.local
-**/*.snap
 
 # Playwright
 /test-results/
