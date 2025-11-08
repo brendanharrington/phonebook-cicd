@@ -14,14 +14,14 @@ jobs:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
         with:
-          node-version: '24'
+          node-version: '20'
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       - name: Check style
         run: npm run lint
       - name: Build application
         run: npm run build
-      - name: Run tests
+      - name: Run unit tests
         run: npm run test
       
   playwright_tests:
@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       MONGODB_URI: mongodb://localhost:27017/phonebook_e2e_test
-      PHONEBOOK_API_BASE: http://localhost:5001
+      PORT: '5001'
       CI: 'true'
     services:
       mongo:
@@ -50,22 +50,36 @@ jobs:
         run: npm ci
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
-      - name: Start dev server (background)
+      - name: Build application
+        run: npm run build
+      - name: Start server in background
         run: |
-          # start the dev server in background; ensure it reads MONGODB_URI from env
-          npm run dev > server.log 2>&1 & echo $! > server.pid
-      - name: Wait for server health
+          npm run start > server.log 2>&1 &
+          echo $! > server.pid
+      - name: Wait for server to be ready
         run: |
-          echo "Waiting for server health..."
-          for i in {1..60}; do
-            if curl -sS --fail http://localhost:5001/health || curl -sS --fail http://localhost:5173/; then
-              echo "server ok"
-              break
+          echo "Waiting for server at http://localhost:5001..."
+          timeout=60
+          counter=0
+          until curl -f http://localhost:5001/health > /dev/null 2>&1; do
+            counter=$((counter + 1))
+            if [ $counter -ge $timeout ]; then
+              echo "Server failed to start after ${timeout} seconds"
+              cat server.log
+              exit 1
             fi
+            echo "Waiting for server... (${counter}/${timeout})"
             sleep 1
           done
-      - name: Run Playwright tests
-        run: npx playwright test --reporter=github
+          echo "Server is ready!"
+      - name: Run E2E tests
+        run: npm run test:e2e
+      - name: Stop server
+        if: always()
+        run: |
+          if [ -f server.pid ]; then
+            kill $(cat server.pid) || true
+          fi
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
@@ -105,12 +119,13 @@ jobs:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
         with:
-          node-version: '24'
-      - name: Install dependencies
-        run: npm install
-      - name: Check style
-        run: npm run lint
-      - name: Build application
-        run: npm run build
-      - name: Run tests
-        run: npm run test
+          node-version: '20'
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          vercel-org-id: ${{ secrets.ORG_ID }}
+          vercel-project-id: ${{ secrets.PROJECT_ID }}
+          vercel-args: --prod --confirm
+          working-directory: .
